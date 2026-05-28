@@ -1,41 +1,34 @@
-# Website
+# WP Pillar
 
-This website is built using [Docusaurus](https://docusaurus.io/), a modern static website generator.
+A Laravel-inspired WordPress plugin development framework.
 
-## Installation
+## What is WP Pillar?
 
-```bash
-yarn
-```
+WP Pillar is a lightweight framework that brings modern PHP development patterns — MVC architecture, Eloquent ORM, IoC container, and clean REST routing — into WordPress plugin development.
 
-## Local Development
+## Documentation
 
-```bash
-yarn start
-```
+Full documentation is available at:
+**https://rezwan2024.github.io/wp-pillar-docs/**
 
-This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
+## What it provides
 
-## Build
+- Laravel-inspired MVC structure
+- Eloquent ORM (no more $wpdb)
+- REST API router with built-in nonce verification
+- Permission policy system
+- Database migration system
+- Vue.js and React SPA support inside wp-admin
+- Security by default
 
-```bash
-yarn build
-```
+## First plugin built on WP Pillar
 
-This command generates static content into the `build` directory and can be served using any static contents hosting service.
+**TicketWise AI** — An AI-powered support agent workbench WordPress plugin.
 
-## Deployment
+## Author
 
-Using SSH:
+Built by [Rezwan](https://github.com/rezwan2024)
 
-```bash
-USE_SSH=true yarn deploy
-```
+## License
 
-Not using SSH:
-
-```bash
-GIT_USER=<Your GitHub username> yarn deploy
-```
-
-If you are using GitHub pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
+GPL-2.0-or-later
