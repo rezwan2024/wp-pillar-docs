@@ -8,7 +8,7 @@ const config = {
   favicon: 'img/favicon.svg',
 
   url: 'https://rezwan2024.github.io',
-  baseUrl: '/wp-pillar-framework/',
+  baseUrl: '/wp-pillar-docs/',
 
   organizationName: 'rezwan2024',
   projectName: 'wp-pillar-framework/',
