@@ -11,7 +11,7 @@ const config = {
   baseUrl: '/wp-pillar-docs/',
 
   organizationName: 'rezwan2024',
-  projectName: 'wp-pillar-framework/',
+  projectName: 'wp-pillar-docs',
 
   onBrokenLinks: 'warn',
 
