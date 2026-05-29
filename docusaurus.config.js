@@ -8,10 +8,10 @@ const config = {
   favicon: 'img/favicon.svg',
 
   url: 'https://rezwan2024.github.io',
-  baseUrl: '/wp-pillar-docs/',
+  baseUrl: '/wp-pillar-framework/',
 
   organizationName: 'rezwan2024',
-  projectName: 'wp-pillar-docs',
+  projectName: 'wp-pillar-framework/',
 
   onBrokenLinks: 'warn',
 
@@ -70,7 +70,7 @@ const config = {
             label: 'Docs',
           },
           {
-            href: 'https://github.com/rezwan2024/wp-pillar-docs',
+            href: 'https://github.com/rezwan2024/wp-pillar-framework/',
             label: 'GitHub',
             position: 'right',
           },
@@ -93,7 +93,7 @@ const config = {
             items: [
               {
                 label: 'GitHub',
-                href: 'https://github.com/rezwan2024/wp-pillar-docs',
+                href: 'https://github.com/rezwan2024/wp-pillar-framework/',
               },
             ],
           },
