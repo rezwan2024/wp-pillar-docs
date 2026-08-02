@@ -58,10 +58,6 @@ const config = {
       },
       navbar: {
         title: 'WP Pillar',
-        logo: {
-          alt: 'WordPress Logo',
-          src: 'img/logo.svg',
-        },
         items: [
           {
             type: 'docSidebar',

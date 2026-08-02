@@ -33,7 +33,7 @@ WP Pillar isn't theoretical — it already powers real plugins:
 
 | Plugin | Description |
 |---|---|
-| **TicketWise AI** | A production plugin used daily by the BuddyBoss support team — AI-powered support ticketing built with Vue 3 + Vite + Eloquent ORM + REST API. |
+| **TicketWise AI** | An AI-powered plugin built for WordPress support engineers — built by WP Pillar's creator and used in his own day-to-day support work at BuddyBoss. Vue 3 + Vite + Eloquent ORM + REST API. |
 | **WP Notes** | The test plugin used to validate the framework end-to-end — Vue 3 + Vite + Eloquent ORM + REST API. |
 
 If you'd like to see the framework in action before diving into the setup guide, there's a short demo walkthrough linked from the [framework's GitHub repository](https://github.com/rezwan2024/wp-pillar-framework).

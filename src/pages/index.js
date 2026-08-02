@@ -131,7 +131,7 @@ const SHOWCASE = [
   {
     name: 'TicketWise AI',
     tag: 'Production',
-    description: 'AI-powered support ticketing, used daily by the BuddyBoss support team — built with Vue 3 + Vite + Eloquent ORM + REST API.',
+    description: 'An AI-powered plugin built for WordPress support engineers — built by WP Pillar’s creator and used in his own day-to-day support work at BuddyBoss. Vue 3 + Vite + Eloquent ORM + REST API.',
     href: 'https://github.com/rezwan2024/ticketwise-ai',
   },
   {
