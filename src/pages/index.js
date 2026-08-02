@@ -6,15 +6,15 @@ import Heading from '@theme/Heading';
 import styles from './index.module.css';
 
 const SNIPPET_LINES = [
-  {prompt: true, text: 'git clone https://github.com/rezwan2024/wp-pillar-framework your-plugin-name'},
-  {prompt: true, text: 'cd your-plugin-name && rm -rf .git && git init'},
-  {prompt: true, text: 'composer install'},
+  {text: 'git clone https://github.com/rezwan2024/wp-pillar-framework your-plugin-name'},
+  {text: 'cd your-plugin-name && rm -rf .git && git init'},
+  {text: 'composer install'},
 ];
 
 const STATS = [
   {value: 'PHP 8.0+', label: 'Modern PHP throughout'},
   {value: 'Eloquent', label: 'Real ORM, zero $wpdb'},
-  {value: 'Vue 3 / React', label: 'SPA-ready frontend'},
+  {value: 'Vue 3 / React', label: 'SPA ready frontend'},
   {value: 'MIT', label: 'Illuminate packages'},
 ];
 
@@ -23,13 +23,13 @@ function HomepageHeader() {
     <header className={styles.hero}>
       <div className={styles.heroGlow} aria-hidden="true" />
       <div className={clsx('container', styles.heroContainer)}>
-        <p className={styles.eyebrow}>Laravel-inspired &middot; WordPress plugin framework</p>
+        <p className={styles.eyebrow}>Laravel inspired &middot; WordPress plugin framework</p>
         <Heading as="h1" className={styles.heroTitle}>
           Build WordPress plugins<br />like a modern PHP framework.
         </Heading>
         <p className={styles.heroSubtitle}>
           WP Pillar brings Eloquent ORM, clean REST routing, an IoC container, and
-          service providers into WordPress plugin development — without fighting
+          service providers into WordPress plugin development without fighting
           the hook system, and without giving up <code>$wpdb</code> when you actually need it.
         </p>
         <div className={styles.buttons}>
@@ -72,36 +72,95 @@ function HomepageHeader() {
   );
 }
 
+/* Simple stroke-based icon set (no emoji) */
+
+function IconDatabase(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <ellipse cx="12" cy="5" rx="8" ry="3" />
+      <path d="M4 5v6c0 1.66 3.58 3 8 3s8-1.34 8-3V5" />
+      <path d="M4 11v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6" />
+    </svg>
+  );
+}
+
+function IconRoute(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <circle cx="6" cy="19" r="2.5" />
+      <circle cx="18" cy="5" r="2.5" />
+      <path d="M8.5 19H15a3 3 0 0 0 3-3v-1a3 3 0 0 0-3-3H9a3 3 0 0 1-3-3V7.5" />
+    </svg>
+  );
+}
+
+function IconShieldCheck(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M12 3l7 3v6c0 4.5-3 7.7-7 9-4-1.3-7-4.5-7-9V6z" />
+      <path d="M9 12l2 2 4-4" />
+    </svg>
+  );
+}
+
+function IconBox(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M21 8l-9-5-9 5 9 5 9-5z" />
+      <path d="M3 8v8l9 5 9-5V8" />
+      <path d="M12 13v8" />
+    </svg>
+  );
+}
+
+function IconLayers(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M12 2l9 5-9 5-9-5 9-5z" />
+      <path d="M3 12l9 5 9-5" />
+      <path d="M3 17l9 5 9-5" />
+    </svg>
+  );
+}
+
+function IconZap(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z" />
+    </svg>
+  );
+}
+
 const CORE_FEATURES = [
   {
     title: 'Eloquent ORM',
-    icon: '\u{1F5C4}️',
-    description: 'Zero $wpdb. Full query builder, relationships, model events, and migrations — the same Illuminate packages that power Laravel.',
+    Icon: IconDatabase,
+    description: 'Zero $wpdb. Full query builder, relationships, model events, and migrations, the same Illuminate packages that power Laravel.',
   },
   {
     title: 'Laravel-style Routing',
-    icon: '\u{1F9ED}',
-    description: 'Clean REST API routes with automatic nonce verification, route groups, and a right-to-left middleware pipeline.',
+    Icon: IconRoute,
+    description: 'Clean REST API routes with automatic nonce verification, route groups, and a right to left middleware pipeline.',
   },
   {
     title: 'Security by Default',
-    icon: '\u{1F512}',
-    description: 'Nonce checks, permission Policies, PHP/WordPress version guards, and safe uninstall are part of the framework core — never optional.',
+    Icon: IconShieldCheck,
+    description: 'Nonce checks, permission Policies, PHP and WordPress version guards, and safe uninstall are part of the framework core. Never optional.',
   },
   {
     title: 'IoC Container',
-    icon: '\u{1F4E6}',
-    description: 'Dependency injection inside WordPress, fully isolated per plugin slug — two WP Pillar plugins never step on each other’s config.',
+    Icon: IconBox,
+    description: 'Dependency injection inside WordPress, fully isolated per plugin slug. Two WP Pillar plugins never step on each other’s config.',
   },
   {
     title: 'Multi-plugin Safe',
-    icon: '\u{1F6E1}️',
-    description: 'A shared Eloquent Capsule with named, per-plugin connections and namespace-based auto-routing — no cross-plugin data leaks.',
+    Icon: IconLayers,
+    description: 'A shared Eloquent Capsule with named, per-plugin connections and namespace based auto-routing. No cross-plugin data leaks.',
   },
   {
     title: 'Modern Frontend Ready',
-    icon: '⚡',
-    description: 'Build full SPAs with Vue 3 or React inside wp-admin. Hash-based routing, Vite production builds, zero Gutenberg conflicts.',
+    Icon: IconZap,
+    description: 'Build full SPAs with Vue 3 or React inside wp-admin. Hash-based routing, Vite production builds, and zero Gutenberg conflicts.',
   },
 ];
 
@@ -111,14 +170,16 @@ function CoreFeatures() {
       <div className="container">
         <div className={styles.sectionHeader}>
           <Heading as="h2">Everything a real plugin needs</Heading>
-          <p>Not a toy scaffold — the exact patterns used by production plugins today.</p>
+          <p>Not a toy scaffold. The exact patterns used by production plugins today.</p>
         </div>
         <div className={styles.featureGrid}>
-          {CORE_FEATURES.map((feature) => (
-            <div className={styles.featureCard} key={feature.title}>
-              <div className={styles.featureIcon}>{feature.icon}</div>
-              <Heading as="h3" className={styles.featureTitle}>{feature.title}</Heading>
-              <p className={styles.featureDescription}>{feature.description}</p>
+          {CORE_FEATURES.map(({title, Icon, description}) => (
+            <div className={styles.featureCard} key={title}>
+              <div className={styles.featureIcon}>
+                <Icon className={styles.featureIconSvg} />
+              </div>
+              <Heading as="h3" className={styles.featureTitle}>{title}</Heading>
+              <p className={styles.featureDescription}>{description}</p>
             </div>
           ))}
         </div>
@@ -131,13 +192,13 @@ const SHOWCASE = [
   {
     name: 'TicketWise AI',
     tag: 'Production',
-    description: 'An AI-powered plugin built for WordPress support engineers — built by WP Pillar’s creator and used in his own day-to-day support work at BuddyBoss. Vue 3 + Vite + Eloquent ORM + REST API.',
+    description: 'An AI-powered plugin built for WordPress support engineers, built by WP Pillar’s creator and used in his own day to day support work at BuddyBoss. Vue 3, Vite, Eloquent ORM, and a REST API.',
     href: 'https://github.com/rezwan2024/ticketwise-ai',
   },
   {
     name: 'WP Notes',
     tag: 'Reference',
-    description: 'The test plugin used to validate the framework end-to-end — Vue 3 + Vite + Eloquent ORM + REST API.',
+    description: 'The test plugin used to validate the framework end to end. Vue 3, Vite, Eloquent ORM, and a REST API.',
     href: 'https://github.com/rezwan2024/wp-notes-plugin-wp-pillar-vue3',
   },
 ];
@@ -171,7 +232,7 @@ function FinalCta() {
       <div className="container">
         <Heading as="h2" className={styles.ctaTitle}>Ready to build your next plugin?</Heading>
         <p className={styles.ctaSubtitle}>
-          Follow the step-by-step setup guide and have a working, independent WP Pillar plugin in minutes.
+          Follow the step by step setup guide and have a working, independent WP Pillar plugin in minutes.
         </p>
         <Link className={clsx('button button--lg', styles.primaryButton)} to="/docs/building-plugins/new-plugin-setup">
           Read the Setup Guide
@@ -184,7 +245,7 @@ function FinalCta() {
 export default function Home() {
   return (
     <Layout
-      title="WP Pillar — A Laravel-inspired WordPress plugin framework"
+      title="WP Pillar, a Laravel inspired WordPress plugin framework"
       description="WP Pillar brings Eloquent ORM, clean REST routing, an IoC container, and service providers into WordPress plugin development.">
       <HomepageHeader />
       <main>

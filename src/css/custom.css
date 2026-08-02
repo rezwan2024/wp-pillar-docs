@@ -47,7 +47,54 @@
   box-shadow: 0 1px 0 var(--wpp-border-dark);
 }
 
+/* Red text wordmark in the navbar, Laravel-style */
+.navbar__brand .navbar__title {
+  color: #ff2d20;
+  font-weight: 800;
+}
+
 /* Sidebar styles */
 .theme-doc-sidebar-item-category .menu__list {
   overflow: hidden;
+}
+
+/* ---------- Footer, Laravel-style: dark, minimal, generous spacing ---------- */
+
+.footer {
+  --ifm-footer-background-color: var(--wpp-bg-dark);
+  --ifm-footer-color: #85858c;
+  --ifm-footer-link-color: #b8b8bd;
+  --ifm-footer-link-hover-color: #ff2d20;
+  --ifm-footer-title-color: #ffffff;
+  --ifm-footer-padding-vertical: 4rem;
+  border-top: 1px solid var(--wpp-border-dark);
+}
+
+.footer__title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  margin-bottom: 1.1rem;
+}
+
+.footer__item {
+  margin-bottom: 0.6rem;
+}
+
+.footer__link-item {
+  font-size: 0.9rem;
+  transition: color 0.15s ease;
+}
+
+.footer__bottom {
+  margin-top: 3rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--wpp-border-dark);
+  text-align: center;
+}
+
+.footer__copyright {
+  color: #6b6b71;
+  font-size: 0.85rem;
 }

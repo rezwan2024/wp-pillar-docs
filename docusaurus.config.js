@@ -76,25 +76,24 @@ const config = {
         style: 'dark',
         links: [
           {
-            title: 'Docs',
+            title: 'Documentation',
             items: [
-              {
-                label: 'Introduction',
-                to: '/docs/intro',
-              },
+              {label: 'Introduction', to: '/docs/intro'},
+              {label: 'New Plugin Setup', to: '/docs/building-plugins/new-plugin-setup'},
+              {label: 'Architecture', to: '/docs/architecture/why-i-built-it'},
+              {label: 'Framework Layers', to: '/docs/framework-layers/application-container'},
             ],
           },
           {
-            title: 'More',
+            title: 'Framework',
             items: [
-              {
-                label: 'GitHub',
-                href: 'https://github.com/rezwan2024/wp-pillar-framework/',
-              },
+              {label: 'GitHub Repository', href: 'https://github.com/rezwan2024/wp-pillar-framework'},
+              {label: 'TicketWise AI', href: 'https://github.com/rezwan2024/ticketwise-ai'},
+              {label: 'WP Notes', href: 'https://github.com/rezwan2024/wp-notes-plugin-wp-pillar-vue3'},
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} Rezwan.`,
+        copyright: `Copyright © ${new Date().getFullYear()} WP Pillar. Built by Rezwan.`,
       },
       prism: {
         theme: prismThemes.github,
