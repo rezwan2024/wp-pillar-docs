@@ -63,70 +63,116 @@ public function authorize(): bool
 }
 ```
 
-### PHP and WordPress Version Checks
+### PHP, WordPress Version, and Multisite Checks
 
-The plugin entry file must check PHP and WordPress version requirements before loading anything. If requirements are not met, the plugin shows an admin notice and exits cleanly instead of triggering fatal errors.
+The plugin entry file runs three checks, **in this exact order**, before anything else loads:
+
+1. **PHP version** — must be checked *first*, before any other code path, because a WordPress function call on an incompatible PHP version can itself trigger a fatal error rather than a clean admin notice.
+2. **WordPress version.**
+3. **Multisite** — WP Pillar v1.x does not support multisite. Rather than silently running in an unsupported configuration, the scaffold detects `is_multisite()` and deactivates itself with an explanatory notice.
 
 ```php
-// my-plugin.php
+// your-plugin-name.php
 defined('ABSPATH') || exit;
 
+// 1 — PHP version check, must be first.
 if (version_compare(PHP_VERSION, '8.0', '<')) {
-    add_action('admin_notices', function() {
-        echo '<div class="error"><p>My Plugin requires PHP 8.0 or higher.</p></div>';
+    add_action('admin_notices', static function () {
+        echo '<div class="notice notice-error"><p>';
+        printf(
+            '<strong>Your Plugin</strong> requires PHP 8.0 or higher. Your server is running PHP %s.',
+            esc_html(PHP_VERSION)
+        );
+        echo '</p></div>';
     });
     return;
 }
 
-if (version_compare(get_bloginfo('version'), '6.0', '<')) {
-    add_action('admin_notices', function() {
-        echo '<div class="error"><p>My Plugin requires WordPress 6.0 or higher.</p></div>';
+// 2 — WordPress version check.
+if (function_exists('get_bloginfo') && version_compare(get_bloginfo('version'), '6.0', '<')) {
+    add_action('admin_notices', static function () {
+        echo '<div class="notice notice-error"><p><strong>Your Plugin</strong> requires WordPress 6.0 or higher.</p></div>';
     });
+    return;
+}
+
+// 3 — Multisite is not supported; deactivate rather than run in an unsupported state.
+if (function_exists('is_multisite') && is_multisite()) {
+    add_action('admin_notices', static function () {
+        echo '<div class="notice notice-error"><p><strong>Your Plugin</strong> does not support WordPress Multisite.</p></div>';
+    });
+    if (function_exists('deactivate_plugins')) {
+        deactivate_plugins(plugin_basename(__FILE__));
+    }
     return;
 }
 
 require_once __DIR__ . '/vendor/autoload.php';
 ```
 
+Every WP Pillar plugin also defines three constants right after these checks — `{PLUGIN}_VERSION`, `{PLUGIN}_PATH`, `{PLUGIN}_URL` — so addon plugins can detect the dependency and its version before hooking in.
+
+### The uninstall hook must never be a closure
+
+`register_uninstall_hook()` serializes its callback into a WordPress option so it can run in a separate, later request — and **PHP cannot serialize a `Closure`**. Passing one causes a fatal error (`Serialization of 'Closure' is not allowed`) the moment the plugin is deleted. Use a named static class method instead:
+
+```php
+class YourPluginUninstaller
+{
+    public static function run(): void
+    {
+        require_once __DIR__ . '/vendor/autoload.php';
+        require_once __DIR__ . '/boot/app.php';
+        \YourPlugin\Framework\Console\Installer::uninstall(wpillar_config('slug'), $migrations);
+    }
+}
+
+register_uninstall_hook(__FILE__, ['YourPluginUninstaller', 'run']);
+```
+
+**Rule for every plugin built on WP Pillar:** `register_activation_hook()` and `register_deactivation_hook()` can use closures safely (they run in the same request, never serialized) — but `register_uninstall_hook()` must always use the `['ClassName', 'method']` array form.
+
 ### Safe Uninstall
 
-The `Installer::uninstall()` method runs when a user **permanently deletes** the plugin from WordPress — not on deactivation. Users who deactivate a plugin temporarily must never lose their data.
+`Installer::uninstall($slug, $migrations)` runs when a user **permanently deletes** the plugin from WordPress — not on deactivation. Users who deactivate a plugin temporarily must never lose their data. It:
+
+- Drops plugin tables **only** if the `{slug}_delete_data` option is exactly the string `'yes'`.
+- Always cleans up the plugin's own `wp_options` entries (`{slug}_delete_data`, `{slug}_installed_at`, `{slug}_ran_migrations`, `{slug}_ran_seeders`) regardless of that choice.
 
 **WordPress best practice — give users a choice.**
 
-Silently deleting all plugin data on uninstall is not recommended. The correct pattern is to let users decide whether they want to remove their data. WP Pillar plugins implement this through a plugin setting:
+Silently deleting all plugin data on uninstall is not recommended. The correct pattern is to let users decide whether they want to remove their data through a plugin setting:
 
 ```php
 // In plugin settings: "Delete all plugin data on uninstall?" checkbox
-// Stored as: update_option('myplugin_delete_data_on_uninstall', true/false)
+// Stored as: update_option('your-plugin-name_delete_data', 'yes' or 'no')
 ```
 
-When a user deletes the plugin from WordPress, the `uninstall()` method checks this preference:
+Calling `Installer::uninstall()` from your named uninstaller class (see above) is all that's needed — the framework handles checking that option and cleaning up correctly:
 
 ```php
-public static function uninstall(): void
+class YourPluginUninstaller
 {
-    if (!defined('WP_UNINSTALL_PLUGIN')) {
-        return;
-    }
+    public static function run(): void
+    {
+        require_once __DIR__ . '/vendor/autoload.php';
+        require_once __DIR__ . '/boot/app.php';
 
-    // Only delete data if the user explicitly opted in
-    $delete_data = get_option('myplugin_delete_data_on_uninstall', false);
+        Installer::uninstall(wpillar_config('slug'), [
+            YourPlugin\Database\Migrations\CreateInvoicesTable::class,
+        ]);
 
-    if ($delete_data) {
-        // Drop all plugin tables
-        Migration::rollback(self::$migrations);
-        // Delete all plugin options
-        delete_option('myplugin_settings');
-        delete_option('myplugin_version');
-        delete_option('myplugin_delete_data_on_uninstall');
-        // Delete scheduled cron jobs
-        wp_clear_scheduled_hook('myplugin_daily_sync');
+        // Anything the framework doesn't know about — your own custom
+        // options, scheduled cron jobs — clean up here too, guarded by
+        // the same "delete data" preference:
+        if (get_option('your-plugin-name_delete_data') === 'yes') {
+            wp_clear_scheduled_hook('your-plugin-name_daily_sync');
+        }
     }
-    // If $delete_data is false: plugin is deleted but data stays in the database.
-    // The user can reinstall the plugin later and all their data will still be there.
 }
 ```
+
+If the user never opted in: the plugin is deleted but every table and setting stays in the database, and reinstalling the plugin later restores full access to that data.
 
 **What data can be cleaned on uninstall (when opted in):**
 
@@ -145,13 +191,15 @@ Show the "Delete data on uninstall" option prominently in your plugin's settings
 
 Before declaring a plugin built on WP Pillar production-ready, verify all of the following:
 
-- [ ] All REST routes registered through WP Pillar Router (nonce auto-verified)
-- [ ] Every controller has a Policy assigned
-- [ ] PHP 8.0+ check in plugin entry file
-- [ ] WordPress 6.0+ check in plugin entry file
+- [ ] All REST routes registered through WP Pillar Router (nonce auto-verified, unless deliberately `public*`)
+- [ ] Every controller method also checks `current_user_can()` directly, not just the route Policy
+- [ ] PHP version check is the *first* thing the plugin entry file does
+- [ ] WordPress version check follows the PHP check
+- [ ] Multisite check (`is_multisite()`) deactivates the plugin with a clear notice rather than running unsupported
+- [ ] `register_uninstall_hook()` uses a named static class method, never a closure
 - [ ] `defined('ABSPATH') || exit` at top of all PHP files
 - [ ] All user input sanitised before use (`sanitize_text_field()`, `absint()`, `wp_kses()`)
 - [ ] All database output escaped before display (`esc_html()`, `esc_attr()`)
-- [ ] Uninstall hook only runs when `WP_UNINSTALL_PLUGIN` is defined
+- [ ] Uninstall only drops tables when the user has explicitly opted in (`{slug}_delete_data === 'yes'`)
 - [ ] No sensitive data stored in JavaScript (API keys, passwords)
 - [ ] All frontend strings go through `wp_localize_script()` — no PHP echoed directly into JS
